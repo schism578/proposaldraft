@@ -4,26 +4,30 @@
 
 import { useState } from "react";
 import ProposalForm from "./components/ProposalForm";
+import ProposalPreview from "./components/ProposalPreview";
 
 export default function Home() {
   const [proposal, setProposal] = useState<any>(null);
+  const [formSnapshot, setFormSnapshot] = useState<any>(null);
+
+  const handleProposalGenerated = (proposal: any, formData: any) => {
+    setProposal(proposal);
+    setFormSnapshot(formData);
+  };
 
   return (
     <main className="min-h-screen bg-gray-50 py-12">
       {!proposal ? (
-        <ProposalForm onProposalGenerated={setProposal} />
+        <ProposalForm onProposalGenerated={handleProposalGenerated} />
       ) : (
-        <div className="max-w-2xl mx-auto p-6">
-          <pre className="bg-white rounded-lg p-6 text-sm overflow-auto shadow">
-            {JSON.stringify(proposal, null, 2)}
-          </pre>
-          <button
-            onClick={() => setProposal(null)}
-            className="mt-4 text-blue-600 hover:underline text-sm"
-          >
-            ← Generate another
-          </button>
-        </div>
+        <ProposalPreview
+          proposal={proposal}
+          businessName={formSnapshot.businessName}
+          contractorName={formSnapshot.contractorName}
+          clientName={formSnapshot.clientName}
+          clientAddress={formSnapshot.clientAddress}
+          onBack={() => setProposal(null)}
+        />
       )}
     </main>
   );

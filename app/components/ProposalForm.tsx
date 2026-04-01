@@ -11,7 +11,7 @@ interface LineItem {
 }
 
 interface ProposalFormProps {
-  onProposalGenerated: (proposal: any) => void;
+  onProposalGenerated: (proposal: any, formData: any) => void;
 }
 
 export default function ProposalForm({ onProposalGenerated }: ProposalFormProps) {
@@ -73,7 +73,7 @@ export default function ProposalForm({ onProposalGenerated }: ProposalFormProps)
 
       if (!res.ok) throw new Error(data.error || "Something went wrong");
 
-      onProposalGenerated(data.proposal);
+      onProposalGenerated(data.proposal, formData);
     } catch (err: any) {
       setError(err.message);
     } finally {
@@ -96,7 +96,7 @@ export default function ProposalForm({ onProposalGenerated }: ProposalFormProps)
               value={formData.businessName}
               onChange={handleChange}
               required
-              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
               placeholder="Apex Roofing LLC"
             />
           </div>
@@ -107,7 +107,7 @@ export default function ProposalForm({ onProposalGenerated }: ProposalFormProps)
               value={formData.contractorName}
               onChange={handleChange}
               required
-              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
               placeholder="Jake Reynolds"
             />
           </div>
@@ -125,7 +125,7 @@ export default function ProposalForm({ onProposalGenerated }: ProposalFormProps)
               value={formData.clientName}
               onChange={handleChange}
               required
-              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
               placeholder="Sarah Mitchell"
             />
           </div>
@@ -135,7 +135,7 @@ export default function ProposalForm({ onProposalGenerated }: ProposalFormProps)
               name="clientAddress"
               value={formData.clientAddress}
               onChange={handleChange}
-              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
               placeholder="123 Maple St, Austin, TX 78701"
             />
           </div>
@@ -156,7 +156,7 @@ export default function ProposalForm({ onProposalGenerated }: ProposalFormProps)
             onChange={handleChange}
             required
             rows={4}
-            className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
             placeholder="Full roof replacement on a 2,400 sq ft home. Tear off existing shingles, replace damaged decking, install new 30-year architectural shingles, new gutters on front and back..."
           />
         </div>
@@ -169,14 +169,14 @@ export default function ProposalForm({ onProposalGenerated }: ProposalFormProps)
           {lineItems.map((item, index) => (
             <div key={index} className="grid grid-cols-12 gap-2 items-center">
               <input
-                className="col-span-6 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="col-span-6 border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 placeholder="Description (e.g. Architectural shingles)"
                 value={item.description}
                 onChange={(e) => handleLineItemChange(index, "description", e.target.value)}
               />
               <input
                 type="number"
-                className="col-span-2 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="col-span-2 border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 placeholder="Qty"
                 value={item.quantity}
                 min={1}
@@ -184,7 +184,7 @@ export default function ProposalForm({ onProposalGenerated }: ProposalFormProps)
               />
               <input
                 type="number"
-                className="col-span-3 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="col-span-3 border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 placeholder="Unit price"
                 value={item.unitPrice}
                 min={0}
@@ -225,7 +225,7 @@ export default function ProposalForm({ onProposalGenerated }: ProposalFormProps)
               name="paymentTerms"
               value={formData.paymentTerms}
               onChange={handleChange}
-              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
           <div>
@@ -235,7 +235,7 @@ export default function ProposalForm({ onProposalGenerated }: ProposalFormProps)
               name="validDays"
               value={formData.validDays}
               onChange={handleChange}
-              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
         </div>
