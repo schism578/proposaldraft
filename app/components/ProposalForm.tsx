@@ -21,6 +21,7 @@ export default function ProposalForm({ onProposalGenerated }: ProposalFormProps)
   const [formData, setFormData] = useState({
     businessName: "",
     contractorName: "",
+    contractorEmail: "",
     clientName: "",
     clientAddress: "",
     jobDescription: "",
@@ -109,6 +110,18 @@ export default function ProposalForm({ onProposalGenerated }: ProposalFormProps)
               required
               className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
               placeholder="Jake Reynolds"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-600 mb-1">Your Email</label>
+            <input
+              name="contractorEmail"
+              value={formData.contractorEmail}
+              onChange={handleChange}
+              required
+              type="email"
+              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              placeholder="jake@apexroofing.com"
             />
           </div>
         </div>

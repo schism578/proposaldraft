@@ -11,9 +11,9 @@ export default function Home() {
   const [formSnapshot, setFormSnapshot] = useState<any>(null);
 
   const handleProposalGenerated = (proposal: any, formData: any) => {
-    setProposal(proposal);
-    setFormSnapshot(formData);
-  };
+  setProposal(proposal);
+  setFormSnapshot(formData);
+};
 
   return (
     <main className="min-h-screen bg-gray-50 py-12">
@@ -24,6 +24,7 @@ export default function Home() {
           proposal={proposal}
           businessName={formSnapshot.businessName}
           contractorName={formSnapshot.contractorName}
+          contractorEmail={formSnapshot.contractorEmail} // ADD THIS
           clientName={formSnapshot.clientName}
           clientAddress={formSnapshot.clientAddress}
           onBack={() => setProposal(null)}

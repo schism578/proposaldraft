@@ -2,6 +2,10 @@
 
 "use client";
 
+import { useState } from "react";
+import { PDFDownloadLink } from "@react-pdf/renderer";
+import ProposalPDF from "./ProposalPDF";
+
 interface LineItem {
   description: string;
   quantity: number;
@@ -27,43 +31,118 @@ interface ProposalPreviewProps {
   proposal: Proposal;
   businessName: string;
   contractorName: string;
+  contractorEmail: string;
   clientName: string;
   clientAddress: string;
   onBack: () => void;
+  hideToolbar?: boolean;
 }
 
 export default function ProposalPreview({
   proposal,
   businessName,
   contractorName,
+  contractorEmail,
   clientName,
   clientAddress,
   onBack,
+  hideToolbar = false,
 }: ProposalPreviewProps) {
+  const [sendLoading, setSendLoading] = useState(false);
+  const [proposalLink, setProposalLink] = useState("");
+
   const today = new Date().toLocaleDateString("en-US", {
     year: "numeric",
     month: "long",
     day: "numeric",
   });
 
+  const handleSend = async () => {
+    setSendLoading(true);
+    try {
+      const res = await fetch("/api/save-proposal", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          businessName,
+          contractorName,
+          contractorEmail,
+          clientName,
+          clientAddress,
+          proposalData: proposal,
+        }),
+      });
+
+      const data = await res.json();
+      const link = `${window.location.origin}/proposal/${data.id}`;
+      setProposalLink(link);
+    } catch (err) {
+      alert("Failed to generate link. Please try again.");
+    } finally {
+      setSendLoading(false);
+    }
+  };
+
   return (
     <div className="max-w-3xl mx-auto py-10 px-4">
 
       {/* Toolbar */}
-      <div className="flex justify-between items-center mb-6">
-        <button
-          onClick={onBack}
-          className="text-sm text-gray-500 hover:text-gray-800"
-        >
-          ← Back to form
-        </button>
-        <button
-          onClick={() => window.print()}
-          className="bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold px-4 py-2 rounded-lg"
-        >
-          Download / Print PDF
-        </button>
-      </div>
+      {!hideToolbar && (
+        <div className="flex justify-between items-center mb-6">
+          <button
+            onClick={onBack}
+            className="text-sm text-gray-500 hover:text-gray-800"
+          >
+            ← Back to form
+          </button>
+          <div className="flex gap-3">
+            <PDFDownloadLink
+              document={
+                <ProposalPDF
+                  proposal={proposal}
+                  businessName={businessName}
+                  contractorName={contractorName}
+                  clientName={clientName}
+                  clientAddress={clientAddress}
+                />
+              }
+              fileName={`${clientName.replace(/\s+/g, "-")}-proposal.pdf`}
+              className="bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold px-4 py-2 rounded-lg"
+            >
+              {({ loading }) => (loading ? "Preparing PDF..." : "Download PDF")}
+            </PDFDownloadLink>
+            <button
+              onClick={handleSend}
+              disabled={sendLoading}
+              className="bg-green-500 hover:bg-green-600 disabled:bg-green-300 text-white text-sm font-semibold px-4 py-2 rounded-lg"
+            >
+              {sendLoading ? "Generating link..." : "Send to Client →"}
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Proposal Link Banner */}
+      {proposalLink && (
+        <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg">
+          <p className="text-sm font-semibold text-green-800 mb-2">
+            ✓ Proposal link ready — share this with your client:
+          </p>
+          <div className="flex gap-2">
+            <input
+              readOnly
+              value={proposalLink}
+              className="flex-1 text-sm border border-green-300 rounded px-3 py-2 bg-white text-gray-700"
+            />
+            <button
+              onClick={() => navigator.clipboard.writeText(proposalLink)}
+              className="text-sm bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg font-medium"
+            >
+              Copy
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* Proposal Document */}
       <div
