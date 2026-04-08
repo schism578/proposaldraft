@@ -21,9 +21,9 @@ export default function ClientProposalView({
   proposal,
   businessName,
   contractorName,
+  contractorEmail,
   clientName,
   clientAddress,
-  contractorEmail,
   status: initialStatus,
 }: ClientProposalViewProps) {
   const [status, setStatus] = useState(initialStatus);
@@ -82,6 +82,7 @@ export default function ClientProposalView({
         proposal={proposal}
         businessName={businessName}
         contractorName={contractorName}
+        contractorEmail={contractorEmail}
         clientName={clientName}
         clientAddress={clientAddress}
         onBack={() => {}}
