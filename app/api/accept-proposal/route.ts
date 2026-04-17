@@ -26,6 +26,7 @@ export async function POST(req: NextRequest) {
     // Send notification email to contractor
     await resend.emails.send({
       from: "ProposalDraft <onboarding@resend.dev>",
+      replyTo: "proposaldraftowner@gmail.com",
       to: contractorEmail,
       subject: `✓ ${data.client_name} accepted your proposal`,
       html: `

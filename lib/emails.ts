@@ -7,6 +7,7 @@ const resend = new Resend(process.env.RESEND_API_KEY);
 export async function sendWelcomeEmail(to: string, name?: string) {
   await resend.emails.send({
     from: "ProposalDraft <onboarding@resend.dev>",
+    replyTo: "proposaldraftowner@gmail.com",
     to,
     subject: "Welcome to ProposalDraft — here's how to win your first job",
     html: `
@@ -70,6 +71,7 @@ export async function sendWelcomeEmail(to: string, name?: string) {
 export async function sendDayThreeEmail(to: string) {
   await resend.emails.send({
     from: "ProposalDraft <onboarding@resend.dev>",
+    replyTo: "proposaldraftowner@gmail.com",
     to,
     subject: "3 tips to win more jobs with ProposalDraft",
     html: `
@@ -125,6 +127,7 @@ export async function sendDayThreeEmail(to: string) {
 export async function sendTrialEndingEmail(to: string) {
   await resend.emails.send({
     from: "ProposalDraft <onboarding@resend.dev>",
+    replyTo: "proposaldraftowner@gmail.com",
     to,
     subject: "Your ProposalDraft trial ends in 2 days",
     html: `
